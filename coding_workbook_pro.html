@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Interview Coding Workbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:  #313640;
+    --surface: #111520;
+    --surface2: #161b2c;
+    --border: #1e2640;
+    --accent: #4f8ef7;
+    --accent2: #7c3aed;
+    --accent3: #06d6a0;
+    --easy: #06d6a0;
+    --medium: #f59e0b;
+    --hard: #ef4444;
+    --text: #e8eaf2;
+    --text-muted: #00fdff;
+    --text-dim: #3d4566;
+    --tag-bg: rgba(79,142,247,0.10);
+    --card-glow-easy: rgba(6,214,160,0.07);
+    --card-glow-medium: rgba(245,158,11,0.07);
+    --card-glow-hard: rgba(239,68,68,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── COVER PAGE ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79,142,247,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 90% 80%, rgba(124,58,237,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cover-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 0%, transparent 80%);
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #4ff7ec;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .cover-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .cover h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .cover h1 span {
+    background: linear-gradient(135deg, #4f8ef7 0%, #7c3aed 50%, #06d6a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-sub {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 52px;
+    position: relative;
+  }
+
+  .cover-stats {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .stat-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    gap: 4px;
+  }
+
+  .stat-pill:first-child { border-radius: 12px 0 0 12px; }
+  .stat-pill:last-child { border-radius: 0 12px 12px 0; }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .stat-pill.easy .stat-number { color: var(--easy); }
+  .stat-pill.medium .stat-number { color: var(--medium); }
+  .stat-pill.hard .stat-number { color: var(--hard); }
+  .stat-pill.total .stat-number { color: var(--accent); }
+
+  .companies {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .company-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    color: #f7f7f7;
+    background: var(--surface);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 60px 24px;
+    position: relative;
+  }
+
+  .section-bar {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .section-bar.easy { background: linear-gradient(to bottom, var(--easy), rgba(6,214,160,0.3)); }
+  .section-bar.medium { background: linear-gradient(to bottom, var(--medium), rgba(245,158,11,0.3)); }
+  .section-bar.hard { background: linear-gradient(to bottom, var(--hard), rgba(239,68,68,0.3)); }
+
+  .section-info h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .section-info p {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 2px;
+  }
+
+  .section-difficulty {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+
+  .section-difficulty.easy {
+    color: var(--easy);
+    border-color: rgba(6,214,160,0.3);
+    background: rgba(6,214,160,0.08);
+  }
+
+  .section-difficulty.medium {
+    color: var(--medium);
+    border-color: rgba(245,158,11,0.3);
+    background: rgba(245,158,11,0.08);
+  }
+
+  .section-difficulty.hard {
+    color: var(--hard);
+    border-color: rgba(239,68,68,0.3);
+    background: rgba(239,68,68,0.08);
+  }
+
+  /* ─── CARDS ─── */
+  .cards-grid {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); */
+    gap: 16px;
+    padding: 0 60px 16px;
+  }
+
+  @media (max-width: 700px) {
+    .cards-grid { grid-template-columns: 1fr; padding: 0 20px 16px; }
+    .section-header { padding: 36px 20px 16px; }
+    .cover { padding: 40px 20px; }
+    .cover-stats { flex-direction: column; gap: 8px; }
+    .stat-pill { border-radius: 12px !important; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    page-break-inside: avoid;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .card.easy { box-shadow: inset 0 0 40px var(--card-glow-easy); }
+  .card.easy:hover { border-color: rgba(6,214,160,0.3); box-shadow: 0 8px 32px rgba(6,214,160,0.12), inset 0 0 40px var(--card-glow-easy); }
+
+  .card.medium { box-shadow: inset 0 0 40px var(--card-glow-medium); }
+  .card.medium:hover { border-color: rgba(245,158,11,0.3); box-shadow: 0 8px 32px rgba(245,158,11,0.12), inset 0 0 40px var(--card-glow-medium); }
+
+  .card.hard { box-shadow: inset 0 0 40px var(--card-glow-hard); }
+  .card.hard:hover { border-color: rgba(239,68,68,0.3); box-shadow: 0 8px 32px rgba(239,68,68,0.12), inset 0 0 40px var(--card-glow-hard); }
+
+  .card-corner {
+    position: absolute;
+    top: 0; right: 0;
+    width: 64px; height: 64px;
+    opacity: 0.06;
+    border-radius: 0 16px 0 0;
+  }
+
+  .card.easy .card-corner { background: radial-gradient(circle at top right, var(--easy), transparent); }
+  .card.medium .card-corner { background: radial-gradient(circle at top right, var(--medium), transparent); }
+  .card.hard .card-corner { background: radial-gradient(circle at top right, var(--hard), transparent); }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #bfbfbf;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .company-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .company-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
+    background: var(--tag-bg);
+    border: 1px solid rgba(79,142,247,0.15);
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  .scenario-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .scenario-text {
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 300;
+    line-height: 1.65;
+    margin-bottom: 18px;
+    border-left: 2px solid var(--border);
+    padding-left: 14px;
+  }
+
+  .card-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 18px 0;
+  }
+
+  .io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .io-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .io-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .io-block-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 400;
+    white-space: pre;
+  }
+
+  .constraints-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .constraint-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .constraint-list li {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .constraint-list li::before {
+    content: '›';
+    color: var(--text-dim);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .skill-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .skill-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 5px;
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .checkbox-area {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .card.easy .checkbox-area:hover { border-color: var(--easy); }
+  .card.medium .checkbox-area:hover { border-color: var(--medium); }
+  .card.hard .checkbox-area:hover { border-color: var(--hard); }
+
+  .checkbox-area.checked { background: var(--accent); border-color: var(--accent); }
+  .checkbox-area.checked::after { content: '✓'; font-size: 12px; color: white; font-weight: bold; }
+
+  /* ─── FOOTER ─── */
+  .workbook-footer {
+    margin: 48px 0 0;
+    padding: 28px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .footer-brand span { color: var(--accent); }
+
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: black; }
+    .card { break-inside: avoid; border: 1px solid #ccc; box-shadow: none !important; }
+    .cover::before, .cover-grid { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ COVER ═══════════════════════════════ -->
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-badge">2026 Edition · Industry Interview Prep</div>
+  <h1>Tech Interview<br>  
+    <!-- <span>Coding Workbook</span>--></h1> 
+  <p class="cover-sub">30 Scenario-Based Problems · Curated from Real Company Interview Rounds</p>
+
+  <div class="cover-stats">
+    <div class="stat-pill total">
+      <span class="stat-number">30</span>
+      <span class="stat-label">Problems</span>
+    </div>
+    <div class="stat-pill easy">
+      <span class="stat-number">6</span>
+      <span class="stat-label">Easy</span>
+    </div>
+    <div class="stat-pill medium">
+      <span class="stat-number">12</span>
+      <span class="stat-label">Medium</span>
+    </div>
+    <div class="stat-pill hard">
+      <span class="stat-number">12</span>
+      <span class="stat-label">Hard</span>
+    </div>
+  </div>
+
+  <div class="companies">
+    <span class="company-tag">Google</span>
+    <span class="company-tag">Amazon</span>
+    <span class="company-tag">Microsoft</span>
+    <span class="company-tag">Meta</span>
+    <span class="company-tag">Flipkart</span>
+    <span class="company-tag">Infosys</span>
+    <span class="company-tag">TCS</span>
+    <span class="company-tag">Wipro</span>
+    <span class="company-tag">Zoho</span>
+    <span class="company-tag">Freshworks</span>
+    <span class="company-tag">Adobe</span>
+    <span class="company-tag">Atlassian</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ EASY ═══════════════════════════════ -->
+<div class="section-header">
+  <div class="section-bar easy"></div>
+  <div class="section-info">
+    <h2>Easy Level Problems</h2>
+    <p>PROBLEMS 01 – 06 · FOUNDATIONS &amp; BASICS</p>
+  </div>
+  <div class="section-difficulty easy">● Easy</div>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Q1 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #01</div>
+    </div>
+    <div class="card-title">Payment Reconciliation — Sum of Transactions</div>
+    <div class="company-badges">
+      <span class="company-badge">Razorpay</span>
+      <span class="company-badge">Paytm</span>
+      <span class="company-badge">PhonePe</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">You are a backend engineer at a fintech startup. Each day, two separate payment gateways report their total settlement amounts. Your task is to write a utility that computes the combined daily settlement — the arithmetic sum of both gateway totals — for the finance dashboard.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">5 3</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">8</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>-10⁹ ≤ A, B ≤ 10⁹ (values can be negative for refunds)</li>
+      <li>Exactly two integers on a single input line</li>
+      <li>Output must be a single integer</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">I/O</span>
+        <span class="skill-tag">Arithmetic</span>
+        <span class="skill-tag">Data Types</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #02</div>
+    </div>
+    <div class="card-title">Server Health Monitor — Peak CPU Finder</div>
+    <div class="company-badges">
+      <span class="company-badge">Amazon AWS</span>
+      <span class="company-badge">Microsoft Azure</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">You are a cloud infrastructure engineer at AWS. Three regional servers report their CPU utilization percentages. Write a monitoring script that identifies the server with the highest load — the critical node that needs immediate attention for auto-scaling decisions.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">12 47 8</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">47</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>-10⁶ ≤ A, B, C ≤ 10⁶</li>
+      <li>All three values are distinct integers</li>
+      <li>Print exactly one integer — the maximum</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Conditionals</span>
+        <span class="skill-tag">Comparison</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #03</div>
+    </div>
+    <div class="card-title">Ticket ID Reversal — Helpdesk Routing System</div>
+    <div class="company-badges">
+      <span class="company-badge">Zoho</span>
+      <span class="company-badge">Freshworks</span>
+      <span class="company-badge">Atlassian</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A helpdesk platform encodes support ticket IDs by reversing the numeric sequence before routing them to the correct department queue. Build the utility function that takes an incoming numeric ticket ID and returns it reversed — stripping any leading zeros to produce a valid system ID.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">12345</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">54321</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁹</li>
+      <li>Leading zeros in output must be omitted (e.g. 100 → 1)</li>
+      <li>N is a non-negative integer</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Loops</span>
+        <span class="skill-tag">Modulo</span>
+        <span class="skill-tag">Integer Division</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #04</div>
+    </div>
+    <div class="card-title">Cryptographic Key Validator — Prime Number Check</div>
+    <div class="company-badges">
+      <span class="company-badge">Google</span>
+      <span class="company-badge">Microsoft</span>
+      <span class="company-badge">IBM</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A security engineering team uses prime numbers as the basis for cryptographic key generation. Before a key is accepted by the system, it must pass a primality check. Build the validation function that determines whether a given integer can serve as a valid prime-based key component.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">29</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Prime</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>2 ≤ N ≤ 10⁶</li>
+      <li>Print "Prime" or "Not Prime"</li>
+      <li>Optimize using trial division up to √N</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Math</span>
+        <span class="skill-tag">Optimization</span>
+        <span class="skill-tag">Loops</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #05</div>
+    </div>
+    <div class="card-title">Username Policy Validator — Palindrome Detection</div>
+    <div class="company-badges">
+      <span class="company-badge">Meta</span>
+      <span class="company-badge">Twitter/X</span>
+      <span class="company-badge">LinkedIn</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A social media platform offers users a "Palindrome Username" badge — a premium vanity feature. During signup, the system must detect if the submitted username reads the same forwards and backwards. Write a case-insensitive checker to power this validation during account creation.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">racecar</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Palindrome</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ len(S) ≤ 1000</li>
+      <li>Alphabets and digits only; no spaces</li>
+      <li>Case-insensitive comparison</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Strings</span>
+        <span class="skill-tag">Slicing</span>
+        <span class="skill-tag">Comparison</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="card easy">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #06</div>
+    </div>
+    <div class="card-title">Sensor Data Aggregator — Peak Reading without Built-ins</div>
+    <div class="company-badges">
+      <span class="company-badge">Bosch</span>
+      <span class="company-badge">Honeywell</span>
+      <span class="company-badge">TCS IoT</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An IoT sensor array transmits a batch of temperature readings every minute. Your embedded monitoring service — running on a resource-constrained device without access to high-level library functions — must identify the peak temperature in each batch using only manual iteration and variable tracking.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">5
+3 7 1 9 4</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">9</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁵</li>
+      <li>-10⁹ ≤ each element ≤ 10⁹</li>
+      <li>Do not use built-in max() or sort()</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Arrays</span>
+        <span class="skill-tag">Iteration</span>
+        <span class="skill-tag">Tracking</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+</div><!-- /easy cards -->
+
+
+<!-- ═══════════════════════════════ MEDIUM ═══════════════════════════════ -->
+<div class="section-header">
+  <div class="section-bar medium"></div>
+  <div class="section-info">
+    <h2>Medium Level Problems</h2>
+    <p>PROBLEMS 07 – 18 · ALGORITHMS &amp; DATA STRUCTURES</p>
+  </div>
+  <div class="section-difficulty medium">● Medium</div>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Q7 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #07</div>
+    </div>
+    <div class="card-title">Sprint Velocity Tracker — Fibonacci Forecasting</div>
+    <div class="company-badges">
+      <span class="company-badge">Atlassian</span>
+      <span class="company-badge">Jira</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A product management tool uses the Fibonacci sequence for agile story-point estimation — a standard in sprint planning. Your task is to generate the first N Fibonacci numbers to populate the story-point picker dropdown used by scrum teams across thousands of projects.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">7</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">0 1 1 2 3 5 8</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 50</li>
+      <li>Space-separated output on one line</li>
+      <li>Series starts with 0, 1</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Sequences</span>
+        <span class="skill-tag">Iteration</span>
+        <span class="skill-tag">Recurrence</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #08</div>
+    </div>
+    <div class="card-title">Lucky Number Engine — Armstrong Number Detector</div>
+    <div class="company-badges">
+      <span class="company-badge">Zoho</span>
+      <span class="company-badge">Infosys</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A gamification platform awards a "Narcissist Badge" to users whose account IDs are Armstrong numbers — numbers equal to the sum of their own digits each raised to the power of the digit count. Build the validation engine that checks submitted IDs for this property on badge-award events.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">153</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Armstrong</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁶</li>
+      <li>Print "Armstrong" or "Not Armstrong"</li>
+      <li>Supports 1 to 7-digit numbers</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Math</span>
+        <span class="skill-tag">Digit Ops</span>
+        <span class="skill-tag">Power</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #09</div>
+    </div>
+    <div class="card-title">NLP Preprocessor — Vowel &amp; Consonant Analyzer</div>
+    <div class="company-badges">
+      <span class="company-badge">Google NLP</span>
+      <span class="company-badge">Amazon Alexa</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A voice assistant team is building a phoneme analysis module for their NLP pipeline. As a preprocessing step, the system must quantify vowels and consonants in each transcribed user utterance. This statistical breakdown feeds into the phonetic model for improved speech synthesis accuracy.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Hello World</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Vowels: 3
+Consonants: 7</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ len(S) ≤ 10⁴</li>
+      <li>May contain upper/lowercase letters and spaces</li>
+      <li>Spaces are neither vowels nor consonants — skip them</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Strings</span>
+        <span class="skill-tag">Traversal</span>
+        <span class="skill-tag">Classification</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #10</div>
+    </div>
+    <div class="card-title">Logistics Pipeline — Manual Bubble Sort for Shipment Priority</div>
+    <div class="company-badges">
+      <span class="company-badge">Amazon</span>
+      <span class="company-badge">Flipkart</span>
+      <span class="company-badge">FedEx</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A last-mile delivery system receives a batch of shipment priority scores. To prepare the dispatch queue, these scores must be sorted in ascending order. For an embedded microservice running on a constrained edge device, you must implement sorting from scratch without any built-in sort functions.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">5
+64 34 25 12 22</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">12 22 25 34 64</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10³</li>
+      <li>Do not use built-in sort() or sorted()</li>
+      <li>Expected time complexity: O(N²)</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Sorting</span>
+        <span class="skill-tag">Bubble Sort</span>
+        <span class="skill-tag">Arrays</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #11</div>
+    </div>
+    <div class="card-title">Product Catalog Search — Binary Search on Sorted Index</div>
+    <div class="company-badges">
+      <span class="company-badge">Amazon</span>
+      <span class="company-badge">Flipkart</span>
+      <span class="company-badge">Myntra</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An e-commerce platform maintains a pre-sorted product ID index for fast lookup. When a customer searches for a product, the backend must locate its position in the sorted index as efficiently as possible. Implement the search algorithm that achieves O(log N) lookup — a requirement from the platform's SLA.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">6
+2 5 8 12 16 23
+12</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Found at index 3</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁵ · List is pre-sorted ascending</li>
+      <li>0-based index; print "Not Found" if absent</li>
+      <li>Must implement Binary Search — O(log N)</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Binary Search</span>
+        <span class="skill-tag">Searching</span>
+        <span class="skill-tag">O(log N)</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #12</div>
+    </div>
+    <div class="card-title">Financial Ledger Merge — Matrix Addition for Budget Reports</div>
+    <div class="company-badges">
+      <span class="company-badge">SAP</span>
+      <span class="company-badge">Oracle Finance</span>
+      <span class="company-badge">Tally</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A financial reporting system receives two budget matrices — one from each business division — with identical dimensions representing expense categories vs. quarters. Your consolidation module must compute element-wise matrix addition to produce a merged annual budget report for the CFO dashboard.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">1 2 3 / 4 5 6
++
+7 8 9 / 1 2 3</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">8 10 12
+5 7 9</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ rows, cols ≤ 100</li>
+      <li>Both matrices have identical dimensions</li>
+      <li>-10⁴ ≤ each element ≤ 10⁴</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">2D Arrays</span>
+        <span class="skill-tag">Nested Loops</span>
+        <span class="skill-tag">Matrix</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #13</div>
+    </div>
+    <div class="card-title">ML Feature Engineering — Matrix Multiplication for Weights</div>
+    <div class="company-badges">
+      <span class="company-badge">Google DeepMind</span>
+      <span class="company-badge">OpenAI</span>
+      <span class="company-badge">NVIDIA</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A machine learning engineer is building a neural network forward-pass from scratch. The core operation involves multiplying an input feature matrix A (M×N) by a weight matrix B (N×P). Implement this multiplication to compute the resulting M×P activation matrix — the foundation of every dense layer.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">A: 1 2 / 3 4
+B: 5 6 / 7 8</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">19 22
+43 50</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ M, N, P ≤ 50</li>
+      <li>Cols(A) must equal rows(B)</li>
+      <li>-10³ ≤ each element ≤ 10³</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Matrix Mult</span>
+        <span class="skill-tag">Nested Loops</span>
+        <span class="skill-tag">Linear Algebra</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #14</div>
+    </div>
+    <div class="card-title">Permutation Counter — Recursive Factorial for Combinatorics</div>
+    <div class="company-badges">
+      <span class="company-badge">Google</span>
+      <span class="company-badge">Microsoft</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A seat allocation algorithm for a concert ticketing platform needs to compute the total number of possible seating arrangements — which mathematically reduces to calculating N! (N factorial). Implement the factorial computation using a recursive function, mimicking how elegant mathematical definitions are expressed in code.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">6</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">720</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>0 ≤ N ≤ 15</li>
+      <li>Must use a recursive function — no loops</li>
+      <li>Output a single integer</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Recursion</span>
+        <span class="skill-tag">Call Stack</span>
+        <span class="skill-tag">Math</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #15</div>
+    </div>
+    <div class="card-title">Checksum Validator — Recursive Digit Sum for Data Integrity</div>
+    <div class="company-badges">
+      <span class="company-badge">Wipro</span>
+      <span class="company-badge">HCL</span>
+      <span class="company-badge">Infosys</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A data transmission protocol validates packet integrity using a digit-sum checksum. Given a packet identifier (a large integer), the system must recursively reduce it to the sum of its individual digits before comparing against the expected checksum value. Implement this reducer using only recursion — no iterative loops allowed.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">9875</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">29</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁹</li>
+      <li>Must use recursion — no loops</li>
+      <li>Output is a single non-negative integer</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Recursion</span>
+        <span class="skill-tag">Digit Ops</span>
+        <span class="skill-tag">Modulo</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #16</div>
+    </div>
+    <div class="card-title">Ad Click Analyzer — Frequency Counter for Campaign Analytics</div>
+    <div class="company-badges">
+      <span class="company-badge">Google Ads</span>
+      <span class="company-badge">Meta Ads</span>
+      <span class="company-badge">InMobi</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A digital advertising platform ingests a stream of ad IDs representing user click events. The analytics engine must count how many times each ad was clicked during a campaign window and display the frequency in order of first appearance — a core metric for campaign performance reporting.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">1 2 3 2 1 4 2 3</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">1 → 2
+2 → 3
+3 → 2
+4 → 1</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁵ · Elements in range 1–10⁴</li>
+      <li>Use a dictionary for O(N) counting</li>
+      <li>Output in order of first occurrence</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Hash Map</span>
+        <span class="skill-tag">Dictionary</span>
+        <span class="skill-tag">Frequency</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #17</div>
+    </div>
+    <div class="card-title">Plagiarism Detection Module — Anagram Checker</div>
+    <div class="company-badges">
+      <span class="company-badge">Turnitin</span>
+      <span class="company-badge">Grammarly</span>
+      <span class="company-badge">Adobe</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A document plagiarism detection tool flags word pairs that are anagrams of each other — a technique used to catch attempts at disguising copied content through letter rearrangement. Build the comparison module that determines whether any two given words (case-insensitive, ignoring spaces) are anagrams.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">listen
+silent</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Anagram</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ len(S) ≤ 10⁴</li>
+      <li>Case-insensitive; ignore spaces</li>
+      <li>Print "Anagram" or "Not Anagram"</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Strings</span>
+        <span class="skill-tag">Sorting</span>
+        <span class="skill-tag">Hash Map</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="card medium">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #18</div>
+    </div>
+    <div class="card-title">Access Control System — GCD &amp; LCM for Sync Scheduling</div>
+    <div class="company-badges">
+      <span class="company-badge">Microsoft</span>
+      <span class="company-badge">Cisco</span>
+      <span class="company-badge">Infosys</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An enterprise access control system synchronizes two independent security modules with different polling intervals (in seconds). To avoid duplicate polling events, the scheduler must compute when both modules will fire simultaneously — which requires finding their LCM. The GCD is needed as an intermediate step via the Euclidean algorithm.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">12 18</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">GCD: 6
+LCM: 36</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ A, B ≤ 10⁹</li>
+      <li>Use Euclidean algorithm for GCD</li>
+      <li>LCM = (A × B) / GCD(A, B)</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Math</span>
+        <span class="skill-tag">Euclidean Algo</span>
+        <span class="skill-tag">Number Theory</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+</div><!-- /medium cards -->
+
+
+<!-- ═══════════════════════════════ HARD ═══════════════════════════════ -->
+<div class="section-header">
+  <div class="section-bar hard"></div>
+  <div class="section-info">
+    <h2>Hard Level Problems</h2>
+    <p>PROBLEMS 19 – 30 · SYSTEM DESIGN, OOP &amp; CONCURRENCY</p>
+  </div>
+  <div class="section-difficulty hard">● Hard</div>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Q19 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #19</div>
+    </div>
+    <div class="card-title">CLI Progress Renderer — Diamond Pattern for Terminal Dashboards</div>
+    <div class="company-badges">
+      <span class="company-badge">Atlassian</span>
+      <span class="company-badge">GitHub CLI</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A DevOps team's CLI tool renders ASCII art patterns in the terminal for visual progress indicators and banners. You are tasked with implementing the diamond pattern renderer — a key component of the tool's TUI (Terminal User Interface) that requires precise control of whitespace logic and nested loops for symmetric output.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">5</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">  *
+ ***
+*****
+ ***
+  *</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 99; N must be odd</li>
+      <li>Use spaces for alignment on both sides</li>
+      <li>No trailing spaces after the last star per row</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Patterns</span>
+        <span class="skill-tag">Nested Loops</span>
+        <span class="skill-tag">String Format</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #20</div>
+    </div>
+    <div class="card-title">RSA Key Generator — Sieve of Eratosthenes for Prime Range</div>
+    <div class="company-badges">
+      <span class="company-badge">Google Security</span>
+      <span class="company-badge">Qualcomm</span>
+      <span class="company-badge">IBM</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A cryptography library needs to enumerate all prime numbers within a given range to serve as candidate factors for RSA key generation. Since individual primality checks are too slow for large ranges, implement the Sieve of Eratosthenes — the gold-standard algorithm that marks composite numbers in bulk at O(N log log N) time.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">10 50</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">11 13 17 19 23 29
+31 37 41 43 47</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>2 ≤ L ≤ R ≤ 10⁶</li>
+      <li>Use Sieve of Eratosthenes — O(N log log N)</li>
+      <li>Output all primes space-separated on one line</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Sieve</span>
+        <span class="skill-tag">Primes</span>
+        <span class="skill-tag">Optimization</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #21</div>
+    </div>
+    <div class="card-title">Resume Parser — Longest Keyword Extractor</div>
+    <div class="company-badges">
+      <span class="company-badge">LinkedIn</span>
+      <span class="company-badge">Naukri</span>
+      <span class="company-badge">HireVue</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An ATS (Applicant Tracking System) extracts the most prominent keyword from each job description line as part of its resume-matching engine. The heuristic identifies the longest word in each sentence as the most domain-specific term. When multiple words tie for length, the first occurrence takes priority.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">The quick brown fox
+jumps over the lazy dog</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">jumps</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ len(sentence) ≤ 10⁴</li>
+      <li>Words separated by single spaces</li>
+      <li>Return the first word if there is a tie</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Strings</span>
+        <span class="skill-tag">Splitting</span>
+        <span class="skill-tag">Comparison</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #22</div>
+    </div>
+    <div class="card-title">Data Pipeline Deduplicator — Remove Duplicates, Preserve Order</div>
+    <div class="company-badges">
+      <span class="company-badge">Databricks</span>
+      <span class="company-badge">Snowflake</span>
+      <span class="company-badge">Cloudera</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A data ingestion pipeline receives sensor event streams that may contain duplicate event IDs. Before storing to the warehouse, duplicates must be removed while preserving the original arrival order of first occurrences. The deduplication must be implemented without using any built-in set operations, for audit-trail compatibility.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">4 2 7 2 4 9 1 7</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">4 2 7 9 1</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁵</li>
+      <li>Do not use set() or frozenset()</li>
+      <li>Preserve original order of first occurrence</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Arrays</span>
+        <span class="skill-tag">Deduplication</span>
+        <span class="skill-tag">Dictionary</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #23</div>
+    </div>
+    <div class="card-title">Log File Analyzer — Word, Line &amp; Character Counter</div>
+    <div class="company-badges">
+      <span class="company-badge">Splunk</span>
+      <span class="company-badge">Datadog</span>
+      <span class="company-badge">ELK Stack</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A log monitoring service needs to compute summary statistics — total lines, word count, and character count — for each ingested log file before indexing. This feeds into the storage quota calculator and dashboard metrics. Implement the file I/O reader that processes the log line by line and aggregates these statistics.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">sample.txt
+(3 lines of text)</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Lines: 3
+Words: 18
+Characters: 102</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>File must exist in the working directory</li>
+      <li>A word = any whitespace-delimited token</li>
+      <li>Characters include spaces and newlines</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">File I/O</span>
+        <span class="skill-tag">String Ops</span>
+        <span class="skill-tag">Aggregation</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #24</div>
+    </div>
+    <div class="card-title">Academic ERP — Student Grade Management with OOP</div>
+    <div class="company-badges">
+      <span class="company-badge">Zoho Schools</span>
+      <span class="company-badge">Moodle</span>
+      <span class="company-badge">Edtech Startups</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An edtech company is building a student management module for their LMS. You must design a Student class that encapsulates a student's name and subject marks, supports adding new marks dynamically, displays the full marksheet, and computes the average grade — forming the backbone of the report card generation service.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Name: Alice
+Marks: 85 90 78 92</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Student: Alice
+Marks: [85,90,78,92]
+Average: 86.25</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>Implement: __init__, add_mark, display, calculate_average</li>
+      <li>0 ≤ each mark ≤ 100</li>
+      <li>Average rounded to 2 decimal places</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">OOP</span>
+        <span class="skill-tag">Classes</span>
+        <span class="skill-tag">Encapsulation</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #25</div>
+    </div>
+    <div class="card-title">Digital Wallet Simulator — Banking System with OOP</div>
+    <div class="company-badges">
+      <span class="company-badge">Razorpay</span>
+      <span class="company-badge">Paytm</span>
+      <span class="company-badge">CRED</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A fintech startup is prototyping a digital wallet engine. Build a BankAccount class that simulates core wallet operations: depositing funds, withdrawing with an insufficient-balance guard, and checking current balance. This forms the transaction logic layer beneath the wallet's API endpoints.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Deposit: 5000
+Withdraw: 1500
+Check Balance</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Deposited: 5000
+Withdrawn: 1500
+Balance: 3500</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>Initial balance is 0</li>
+      <li>Withdraw must validate for sufficient balance</li>
+      <li>All amounts are positive integers</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">OOP</span>
+        <span class="skill-tag">Validation</span>
+        <span class="skill-tag">State Management</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #26</div>
+    </div>
+    <div class="card-title">HRMS Role Hierarchy — Employee Inheritance System</div>
+    <div class="company-badges">
+      <span class="company-badge">SAP HR</span>
+      <span class="company-badge">Workday</span>
+      <span class="company-badge">Oracle HCM</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">An HR management platform models an organizational hierarchy using class inheritance. Build a base Employee class and derive Developer (with programming language) and Manager (with team size) subclasses. Each subclass overrides a display() method to render role-specific employee profiles — core to the HRMS reporting module.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Alice Python 80000
+Bob Team:5 95000</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Alice|Developer|Python|$80,000
+Bob|Manager|Team:5|$95,000</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>Must use class inheritance (not composition)</li>
+      <li>Each subclass must override display()</li>
+      <li>Salary is a positive integer</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Inheritance</span>
+        <span class="skill-tag">Polymorphism</span>
+        <span class="skill-tag">OOP</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #27</div>
+    </div>
+    <div class="card-title">Real-Time Scoreboard — Multithreaded Interleaved Number Printer</div>
+    <div class="company-badges">
+      <span class="company-badge">Google</span>
+      <span class="company-badge">Amazon</span>
+      <span class="company-badge">Uber</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A real-time scoreboard system uses two concurrent worker threads — one handling even-score events, the other handling odd-score events. Both threads must publish updates to a shared feed in strictly sequential order (1, 2, 3...). Implement thread synchronization with locks or semaphores to guarantee correct interleaving without race conditions.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">N = 10</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">1 2 3 4 5 6 7 8 9 10</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>2 ≤ N ≤ 1000; N is even</li>
+      <li>Use threading module with Lock or Semaphore</li>
+      <li>Output must be in strictly ascending order</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Threading</span>
+        <span class="skill-tag">Synchronization</span>
+        <span class="skill-tag">Concurrency</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #28</div>
+    </div>
+    <div class="card-title">Message Queue Architecture — Producer–Consumer Simulation</div>
+    <div class="company-badges">
+      <span class="company-badge">Kafka / Confluent</span>
+      <span class="company-badge">RabbitMQ</span>
+      <span class="company-badge">AWS SQS</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">You are simulating the architecture of a bounded message queue system — similar to Kafka or RabbitMQ. A producer thread generates messages and pushes them to a shared buffer; a consumer thread reads and processes them. Implement thread-safe synchronization so the buffer never overflows and the consumer waits gracefully when it's empty.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Buffer: 5
+Items: 10</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Produced: 1..10
+Consumed: 1..10
+All items processed.</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>Use threading.Semaphore or queue.Queue</li>
+      <li>Buffer must not overflow (bounded)</li>
+      <li>Consumer must block when buffer is empty</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Threading</span>
+        <span class="skill-tag">Semaphore</span>
+        <span class="skill-tag">Queue</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #29</div>
+    </div>
+    <div class="card-title">Fraud Detection Engine — O(N) Duplicate Transaction Finder</div>
+    <div class="company-badges">
+      <span class="company-badge">Visa</span>
+      <span class="company-badge">Mastercard</span>
+      <span class="company-badge">Razorpay</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A payment fraud detection system must identify duplicate transaction IDs in a large batch — a strong signal for double-charge fraud. The naive O(N²) nested comparison is too slow for production-scale batches of millions of transactions. Implement an O(N) hash set approach that detects duplicates in a single pass.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">10
+1 3 4 2 2 3 5 6 4 8</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Duplicates: 2 3 4</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>1 ≤ N ≤ 10⁶</li>
+      <li>Must achieve O(N) time complexity</li>
+      <li>Output duplicates in order of first repeat</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">Hash Set</span>
+        <span class="skill-tag">O(N)</span>
+        <span class="skill-tag">Single Pass</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="card hard">
+    <div class="card-corner"></div>
+    <div class="card-header">
+      <div class="card-num">Problem #30</div>
+    </div>
+    <div class="card-title">Mini Library Management System — Full OOP Application</div>
+    <div class="company-badges">
+      <span class="company-badge">Infosys</span>
+      <span class="company-badge">Wipro</span>
+      <span class="company-badge">Capgemini</span>
+    </div>
+    <div class="card-divider"></div>
+    <div class="scenario-label">📋 Scenario</div>
+    <p class="scenario-text">A public library is digitizing its operations. Build a full Library Management System using OOP with two classes: Book (title, author, ISBN, availability) and Library (collection management). The system must support adding books, issuing to members with availability checks, returns, and partial case-insensitive title/author search — mirroring real OPAC systems.</p>
+    <div class="io-grid">
+      <div class="io-block">
+        <div class="io-block-label">Input</div>
+        <div class="io-block-value">Add: 'Python 101'
+  John · ISBN:1001
+Issue: 1001 → Alice
+Search: 'Python'</div>
+      </div>
+      <div class="io-block">
+        <div class="io-block-label">Output</div>
+        <div class="io-block-value">Book Added.
+Issued to Alice.
+Found: Python 101 by John</div>
+      </div>
+    </div>
+    <div class="constraints-label">Constraints</div>
+    <ul class="constraint-list">
+      <li>Use separate Book and Library classes</li>
+      <li>Issue must check if book is available</li>
+      <li>Search is case-insensitive with partial match</li>
+    </ul>
+    <div class="card-footer">
+      <div class="skill-tags">
+        <span class="skill-tag">OOP</span>
+        <span class="skill-tag">System Design</span>
+        <span class="skill-tag">Classes</span>
+      </div>
+      <div class="checkbox-area" onclick="this.classList.toggle('checked')"></div>
+    </div>
+  </div>
+
+</div><!-- /hard cards -->
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<div class="workbook-footer">
+  <div class="footer-brand">Tech Interview <span>Workbook</span> · 2025 Edition</div>
+  <div class="footer-note">30 Problems · Easy · Medium · Hard · Scenario-Based</div>
+</div>
+
+<script>
+  // Persist checkbox states in sessionStorage
+  document.querySelectorAll('.checkbox-area').forEach((cb, i) => {
+    const key = 'q' + i;
+    if (sessionStorage.getItem(key) === '1') cb.classList.add('checked');
+    cb.addEventListener('click', () => {
+      sessionStorage.setItem(key, cb.classList.contains('checked') ? '1' : '0');
+    });
+  });
+</script>
+</body>
+</html>
